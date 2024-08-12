@@ -1,0 +1,138 @@
+{% extends "layout1.html" %}
+{% block content %}
+<div class="container-flex">
+
+    <div class="col-sm-12 col-md-12">
+
+        <h4>PROSES</h4>
+        <hr />
+
+    </div>
+    <!-- Entries Column -->
+
+    <div class="col-md-12">
+        <div class="row">
+            <!-- Blog Entries Column -->
+
+
+            <div id="formDialog" class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>PARAMETER APRIORI</b>
+                    </div>
+                    <div class="panel-body">
+                        <form id="formProses" enctype="multipart/form-data">
+                            <input type="hidden" id="id" name="id" value="0" />
+                            <label for="start_date">Start Date</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" />
+                            <br>
+                            <label for="end_date">End Date</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" />
+                            <br>
+                            <label for="min_support">Min Support</label>
+                            <input type="number" value="0" min="0" id="min_support" name="min_support"
+                                class="form-control" />
+                            <br>
+                            <label for="min_confidence">Min Confidence</label>
+                            <input type="number" value="0" min="0" id="min_confidence" name="min_confidence"
+                                class="form-control" />
+                            <br>
+                            <label for="min_left">Min Left</label>
+                            <input type="number" value="0" min="0" id="min_left" name="min_left" class="form-control" />
+                            <br>
+                            <div class="text-right">
+                                <button type="button" id="actionProses" class="btn btn-primary">Proses</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#actionProses').click(function () {
+            var formData = new FormData();
+            formData.append('start_date', $('#start_date').val());
+            formData.append('end_date', $('#end_date').val());
+            formData.append('min_support', $('#min_support').val());
+            formData.append('min_confidence', $('#min_confidence').val());
+            formData.append('min_left', $('#min_left').val());
+    
+            $.ajax({
+                url: '/proses/buat',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#loading_ajax').show();
+                },
+                success: function (response) {
+                    console.log(response);
+    
+                    // AJAX POST kedua
+                    var formDataApriori = new FormData();
+                    formDataApriori.append('id', response.id);
+                    $.ajax({
+                        url: '/proses/apriori',
+                        type: 'POST',
+                        data: formDataApriori,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function () {
+                            $('#loading_ajax').show();
+                        },
+                        success: function (response_apriori) {
+
+                            swal({
+                                title: "Berhasil!",
+                                text: "Sedang di dialihkan, Tunggu beberapa saat!",
+                                icon: "success",
+                                button: true,
+                            });
+    
+                            setTimeout(function () {
+                                window.location.href = response_apriori.url;
+                            }, 1000);
+
+                            
+                            $('#loading_ajax').fadeOut("slow");
+                            $('#formProses')[0].reset();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            $('#loading_ajax').fadeOut("slow");
+                            swal({
+                                title: "Gagal!",
+                                text: xhr.responseText,
+                                icon: "warning",
+                                button: true,
+                            });
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    $('#loading_ajax').fadeOut("slow");
+                    swal({
+                        title: "Gagal!",
+                        text: xhr.responseText,
+                        icon: "warning",
+                        button: true,
+                    });
+                }
+            });
+        });
+    });
+    
+
+</script>
+
+{% endblock %}

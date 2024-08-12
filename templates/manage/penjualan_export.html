@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <link href="{{url_for('static', filename='css/cetak.css')}}" rel="stylesheet">
+</head>
+
+<body>
+    <style>
+        .page {
+            padding: 1cm;
+        }
+
+        /**
+        Folio
+        */
+        .page {
+            width: 215.9mm;
+            min-height: 330.2mm;
+        }
+
+        @media print {
+            @page {}
+        }
+
+        table {
+            border-collapse: collapse;
+            width: fit-content;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #000;
+            /* Add 1px solid black border */
+        }
+
+        th {
+            text-align: left;
+        }
+        .signature-section {
+            text-align: right;
+            width: 100%;
+        }
+        .signature-block {
+            width: 200px;
+            margin-left: auto;
+        }
+        .signature-block p {
+            text-align: left;
+        }
+    </style>
+
+    <div class="page">
+        <img src="/uploads/header.png" style="width: 100%;" />
+
+        <center>
+            <h1>Laporan Data Penjualan</h1>
+        </center>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th class="text-center" width="50">No</th>
+                    <th class="text-center" width="120">Tanggal Transaksi</th>
+                    <th class="text-left">Produk</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-center" width="50">Tahun</th>
+                    <th class="text-center" width="50">Jam</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sales %}
+                <tr>
+                    <td>{{ item.nomor }}</td>
+                    <td>{{ item.tanggal }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.qty }}</td>
+                    <td>{{ item.tahun }}</td>
+                    <td>{{ item.jam }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br /><br />
+        <div class="signature-section">
+            <div class="signature-block">
+                <p>Lampung, 3 Januari 2024</p>
+                <p>Mengetahui</p>
+                <p><br /><br /><br /><br /></p> <!-- This will create space for the signature -->
+                <p>Eko Hendratno</p>
+                <p>(Produk Toko)</p>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <script>
+        window.print();
+    </script>
+</body>
+
+</html>

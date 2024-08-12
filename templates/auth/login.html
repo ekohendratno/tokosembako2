@@ -1,0 +1,166 @@
+{% extends "layout2.html" %}
+{% block content %}
+<section id="disclaimer">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4" style="margin-top:80px; background-color:#f2f2f2">
+                <div class="row">
+
+
+                    <div class="col-lg-12 col-md-12 col-xs-12">
+                        <div class="row text-center">
+                            <div style="padding-top: 20px; padding-bottom: 20px; font-size:28px;">Akun</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-xs-12 text-left">
+
+                        <form method="POST" action="/" id="client-login-form">
+
+                            <div class="form-group step1">
+                                <label class="control-label" for="email">Username</label>
+
+                                <div class="input-group">
+
+                                    <input id="email" value="admin" class="form-control" type="email" required="required" name="username" placeholder="Masukkan Emil">
+
+                                    <div class="input-group-btn">
+                                        <span class="btn btn-default" style="margin-left: 1px; background: #f2f2f2">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group step1">
+                                <label class="control-label" for="password">Password</label>
+                                <div class="input-group">
+                                    <input id="password" value="admin" class="form-control pwd" type="password" required="required" name="password" placeholder="Masukkan Password">
+
+                                    <div class="input-group-btn">
+                                        <span class="btn btn-default passwordshow" style="margin-left: 1px; background: #f2f2f2">
+                                            <i class="glyphicon glyphicon-eye-open"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <input type="hidden" name="step" value="1">
+                            <div class="form-group step1">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-xs-12">
+                                        <button onclick="signin()" type="button" id="btn-masuk" class="btn btn-block btn-success pb-2">MASUK</button>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group step1">
+                                <div class="row">
+
+                                </div>
+
+
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(document).on('keypress', 'input', function(e) {
+        if (e.keyCode == 13 && e.target.type !== 'submit') {
+            e.preventDefault();
+            signin();
+        }
+        $(".passwordshow").on('click', function() {
+            var $pwd = $("#password");
+            if ($pwd.attr('type') === 'password') {
+                $pwd.attr('type', 'text');
+            } else {
+                $pwd.attr('type', 'password');
+            }
+        });
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function signin() {
+        $('.status').empty();
+        var username = $('#email').val();
+        var password = $('#password').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/signin',
+            data: 'username=' + username + '&password=' + password,
+            dataType: 'json',
+            tryCount: 0,
+            retryLimit: 3,
+            error: function(xhr, textStatus, errorThrown) {
+                if (textStatus == 'timeout') {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        $.ajax(this);
+                        return;
+                    }
+                    return;
+                }
+                if (xhr.status == 500) {
+                    console.log('Error 500, Terjadi gangguan server!');
+                } else {
+                    //handle error
+                }
+            },
+            beforeSend: function() {
+                $("input, button").attr('disabled', 'disabled');
+            },
+            error: function(hasil) {
+                $('#email, #password').val("");
+                $("input, button").removeAttr('disabled');
+                swal({
+                    title: "Gagal!",
+                    text: "Gagal melakukkan login!",
+                    icon: "error",
+                    button: true,
+                });
+            },
+            success: function(hasil) {
+                if (hasil.success > 0) {
+                    $("input").attr('disabled', 'disabled');
+                    $("button").attr('disabled', 'disabled');
+                    swal({
+                        title: "Berhasil!",
+                        text: "Sedang di dialihkan, Tunggu beberapa saat!",
+                        icon: "success",
+                        button: false,
+                    });
+                } else {
+                    $("input, button").removeAttr('disabled');
+                    swal({
+                        title: "Gagal!",
+                        text: hasil.pesan,
+                        icon: "warning",
+                        button: true,
+                    });
+                }
+                if (hasil.redirect != null) {
+                    setTimeout(function() {
+                        window.location.assign(hasil.redirect);
+                    }, 2000);
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,489 @@
+{% extends "layout1.html" %}
+{% block content %}
+<div class="container-flex">
+
+    <div class="col-sm-12 col-md-12">
+
+        <h4>PROSES RESULT</h4>
+        <hr />
+
+    </div>
+    <!-- Entries Column -->
+
+    <div class="col-md-12">
+        <div class="row">
+            <!-- Blog Entries Column -->
+
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped" style="width: fit-content;">
+                    <tr>
+                        <td><b>Start Data</b></td>
+                        <td>:</td>
+                        <td>{{ log.start_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>End Data</b></td>
+                        <td>:</td>
+                        <td>{{ log.end_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Min Support</b></td>
+                        <td>:</td>
+                        <td>{{ log.min_support }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Min Confidence</b></td>
+                        <td>:</td>
+                        <td>{{ log.min_confidence }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Min Left</b></td>
+                        <td>:</td>
+                        <td>{{ log.min_left }}</td>
+                    </tr>
+                </table>
+                <br />
+                <br />
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 1</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset1 %}
+                                    <tr>
+                                        <td>{{ item.atribut }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support|round(4) }}</td>
+                                        <td>
+                                            {% if item.lolos == 1 %}
+                                            <span class="label label-success">Lolos</span>
+                                            {% else %}
+                                            <span class="label label-danger">Tidak Lolos</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 1 yang lolos</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset1_lolos %}
+                                    <tr>
+                                        <td>{{ item.atribut }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support|round(4) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-md-12">
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 2</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut 1</th>
+                                        <th>Atribut 2</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset2 %}
+                                    <tr>
+                                        <td>{{ item.atribut1 }}</td>
+                                        <td>{{ item.atribut2 }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support }}</td>
+                                        <td>
+                                            {% if item.lolos == 1 %}
+                                            <span class="label label-success">Lolos</span>
+                                            {% else %}
+                                            <span class="label label-danger">Tidak Lolos</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 2 yang lolos</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut 1</th>
+                                        <th>Atribut 2</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset2_lolos %}
+                                    <tr>
+                                        <td>{{ item.atribut1 }}</td>
+                                        <td>{{ item.atribut2 }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-12">
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 3</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut 1</th>
+                                        <th>Atribut 2</th>
+                                        <th>Atribut 3</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset3 %}
+                                    <tr>
+                                        <td>{{ item.atribut1 }}</td>
+                                        <td>{{ item.atribut2 }}</td>
+                                        <td>{{ item.atribut3 }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support }}</td>
+                                        <td>
+                                            {% if item.lolos == 1 %}
+                                            <span class="label label-success">Lolos</span>
+                                            {% else %}
+                                            <span class="label label-danger">Tidak Lolos</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Item Set 3 yang lolos</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Atribut 1</th>
+                                        <th>Atribut 2</th>
+                                        <th>Atribut 3</th>
+                                        <th>Jumlah</th>
+                                        <th>Support</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in itemset3_lolos %}
+                                    <tr>
+                                        <td>{{ item.atribut1 }}</td>
+                                        <td>{{ item.atribut2 }}</td>
+                                        <td>{{ item.atribut3 }}</td>
+                                        <td>{{ item.jumlah }}</td>
+                                        <td>{{ item.support }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Confidence</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Kombinasi 1</th>
+                                        <th>Kombinasi 2</th>
+                                        <th>Support XUy</th>
+                                        <th>Support X</th>
+                                        <th>Confidence</th>
+                                        <th>Min Support</th>
+                                        <th>Min Confidence</th>
+                                        <th>Nilai Uji Lift</th>
+                                        <th>Korelasi Rule</th>
+                                        <th>Jumlah A</th>
+                                        <th>Jumlah B</th>
+                                        <th>Jumlah AB</th>
+                                        <th>PX</th>
+                                        <th>PY</th>
+                                        <th>PXUY</th>
+                                        <th>From Itemset</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in confidence %}
+                                    <tr>
+                                        <td>{{ item.kombinasi1 }}</td>
+                                        <td>{{ item.kombinasi2 }}</td>
+                                        <td>{{ item.support_xUy }}</td>
+                                        <td>{{ item.support_x }}</td>
+                                        <td>{{ item.confidence }}</td>
+                                        <td>{{ item.min_support }}</td>
+                                        <td>{{ item.min_confidence }}</td>
+                                        <td>{{ item.nilai_uji_lift }}</td>
+                                        <td>{{ item.korelasi_rule }}</td>
+                                        <td>{{ item.jumlah_a }}</td>
+                                        <td>{{ item.jumlah_b }}</td>
+                                        <td>{{ item.jumlah_ab }}</td>
+                                        <td>{{ item.px }}</td>
+                                        <td>{{ item.py }}</td>
+                                        <td>{{ item.pxuy }}</td>
+                                        <td>{{ item.from_itemset }}</td>
+                                        <td>
+                                            {% if item.lolos == 1 %}
+                                            <span class="label label-success">Lolos</span>
+                                            {% else %}
+                                            <span class="label label-danger">Tidak Lolos</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="col-md-12 text-right">
+                <a href="javascript:void(0)" data-id="{{ id }}" onClick="formExport(this)" class="btn btn-success">Export Data</a>
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Analisa</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Kombinasi 1</th>
+                                        <th>Kombinasi 2</th>
+                                        <th>From Itemset</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in analisa %}
+                                    <tr>
+                                        <td>{{ item.kombinasi1 }}</td>
+                                        <td>{{ item.kombinasi2 }}</td>
+                                        <td>{{ item.from_itemset }}</td>
+                                        <td>{{ item.keterangan }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>Grafik Rule Asosiasi yang terbentuk</b>
+                    </div>
+                    <div class="panel-body">
+                        <div id="rules" style="width:100%; height:400px;"></div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+    function formExport(element) {
+        // Get the data-id attribute value
+        var id = $(element).data('id');
+        
+        // Construct the URL
+        var url = '/proses/export-pdf/' + id;
+        
+        // Open the URL in a new tab
+        window.open(url, '_blank');
+    }
+    
+    $(function () {
+        var chart;
+        $(document).ready(function () {
+            chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'rules',
+                    type: 'line',
+                    marginRight: 130,
+                    marginBottom: 25
+                },
+                title: {
+                    text: 'Grafik Rule Asosiasi yang terbentuk',
+                    x: -20
+                },
+                subtitle: {
+                    text: 'Grafik Multi Line',
+                    x: -20
+                },
+                xAxis: {
+                    categories: [{% for val in confidence %} "{{ val.kombinasi1 }} => {{ val.kombinasi2 }}"{% if not loop.last %}, {% endif %} {% endfor %}]
+                },
+        yAxis: {
+        title: {
+            text: 'Values'
+        },
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+        }]
+    },
+        tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.name + '</b><br/>' +
+                this.x + ': ' + this.y;
+        }
+    },
+        legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -10,
+        y: 100,
+        borderWidth: 0
+    },
+        series: [{
+            name: 'Total Penjualan',
+            data: [{% for val in confidence %} {{ val.jumlah_ab }} {% if not loop.last %}, {% endif %} {% endfor %}]
+                },
+    {
+        name: 'Confidence',
+            data: [{% for val in confidence %} {{ val.confidence }} {% if not loop.last %}, {% endif %} {% endfor %}]
+                },
+    {
+        name: 'Nilai Uji Lift',
+            data: [{% for val in confidence %} {{ val.nilai_uji_lift }} {% if not loop.last %}, {% endif %} {% endfor %}]
+                }]
+            });
+        });
+    });
+</script>
+{% endblock %}

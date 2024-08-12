@@ -1,0 +1,278 @@
+{% extends "layout1.html" %}
+{% block content %}
+
+<div class="container-flex">
+
+    <div class="col-md-12">
+
+        <h4>PENJUALAN {{tanggal}}</h4>
+        <hr />
+
+    </div>
+    <!-- Entries Column -->
+
+    <div class="col-md-12">
+        <div class="row">
+            <!-- Blog Entries Column -->
+
+
+            <div id="formDialog" class="col-md-4" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>TRANSAKSI</b>
+                    </div>
+                    <div class="panel-body">
+                        <form id="formPenjualan" enctype="multipart/form-data">
+
+                            <input type="hidden" id="id" name="id" value="0" />
+                            <label>Nama Barang</label>
+                            <select id="item" name="item" class="form-control">
+                                <option value="0">Pilih Barang</option>
+                                {% for barang_item in items %}
+                                {% if barang_item[4] is not none and barang_item[4] > 0 %}
+                                <option value="{{ barang_item[0] }}">{{ barang_item[1] }} (tersedia {{
+                                    barang_item[4] }})
+                                </option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            <br />
+                            <label>Jumlah</label>
+                            <input type="number" value="1" min="1" id="quantity" name="quantity" class="form-control" />
+
+                            <br />
+
+
+
+                            <div class="text-right">
+                                <button type="button" onClick="formDialogClose()" class="btn btn-default">Close</button>
+                                <button type="button" id="actionSimpan" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>DAFTAR DATA</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="/penjualan" class="btn btn-default">Kembali</a>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <a href="javascript:void(0)" onClick="formDialog(this)" id="actionTambah"
+                                    class="btn btn-primary">Tambah Barang</a>
+                                <a href="javascript:void(0)" onClick="formExport(this)"
+                                    class="btn btn-success">Export</a>
+                            </div>
+                        </div>
+                        <br />
+                        <table id='postList' class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="50">No</th>
+                                    <th class="text-center" width="220">Date Time</th>
+                                    <th class="text-left">Name</th>
+                                    <th class="text-center" width="50">Qty</th>
+                                    <th class="text-center" width="150">Total Price</th>
+                                    <th class="text-center" width="150"><span class="glyphicon glyphicon-cog"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#actionSimpan').click(function () {
+            var formData = new FormData();
+            formData.append('id', $('#id').val());
+            formData.append('item', $('#item').val());
+            formData.append('quantity', $('#quantity').val());
+            formData.append('sale_id', "{{id}}");
+            $.ajax({
+                url: '/penjualan/transaksi/simpan',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#loading_ajax').show();
+                },
+                success: function (response) {
+                    console.log(response);
+                    $('#loading_ajax').fadeOut("slow");
+                    swal({
+                        title: "Berhasil!",
+                        text: "Sedang di dialihkan, Tunggu beberapa saat!",
+                        icon: "success",
+                        button: true,
+                    });
+
+                    $('#actionTambah').fadeIn('show');
+                    $('#formPenjualan')[0].reset();
+                    $('#formDialog').toggle();
+                    searchFilter(0);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    $('#loading_ajax').fadeOut("slow");
+                    swal({
+                        title: "Gagal!",
+                        text: xhr.responseText,
+                        icon: "warning",
+                        button: true,
+                    });
+                }
+            });
+        });
+    });
+
+
+
+
+    searchFilter(0);
+    function searchFilter(page_num) {
+        page_num = page_num ? page_num : 0;
+        var keywords = $('#keywords').val();
+        var sortBy = $('#sortBy').val();
+        var limitBy = $('#limitBy').val();
+        $.ajax({
+            type: 'GET',
+            url: "/penjualan/transaksi/detail/{{id}}",
+            dataType: 'json',
+            beforeSend: function () {
+                $('#loading_ajax').show();
+            },
+            success: function (responseData) {
+                console.log(responseData);
+                paginationData(responseData.data);
+                $('#loading_ajax').fadeOut("slow");
+            }
+        });
+    }
+
+    function paginationData(data) {
+        $('#postList tbody').empty();
+        var nomor = 1;
+        var qty = 0;
+        var price = 0;
+        for (emp in data) {
+
+            var created_at = formatDate(data[emp][3]);
+            var updated_at = formatDate(data[emp][4]);
+
+            var total_price = data[emp][3] * data[emp][7];
+
+            qty += data[emp][3];
+            price += total_price;
+
+            var empRow = '<tr>' +
+                '<td class="text-center">' + nomor + '</td>' +
+                '<td class="text-center">' + updated_at + '</td>' +
+                '<td>' + data[emp][6] + '</td>' +
+                '<td class="text-center">' + data[emp][3] + '</td>' +
+                '<td class="text-center">' + formatRupiah(total_price) + '</td>' +
+                '<td class="text-center">' +
+                '<a onClick="actionEdit(' + data[emp][0] + ')" href="javascript:void(0)"  class="btn btn-circle btn-success"><span class="glyphicon glyphicon-pencil"></span></a>' +
+                '<a onclick="actionHapus(' + data[emp][0] + ')" href="javascript:void(0)"  class="btn btn-circle btn-danger"><span class="glyphicon glyphicon-trash"></span></a>' +
+                '</td>' +
+                +'</tr>';
+            nomor++;
+            $('#postList tbody').append(empRow);
+        }
+
+
+        $('#postList tbody').append(
+            '<tr>' +
+            '<th colspan="3"></th>' +
+            '<th class="text-center" width="50">' + qty + '</th>' +
+            '<th class="text-center" width="150">' + formatRupiah(price) + '</th>' +
+            '<th></th>' +
+            '</tr>'
+        );
+    }
+
+
+    function actionEdit(id) {
+        $('#formDialog').fadeIn('show');
+        $('#formPenjualan')[0].reset();
+        if (id > 0) {
+            $.ajax({
+                type: "GET",
+                url: "/penjualan/transaksi/data/" + id,
+                cache: false,
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#loading_ajax').show();
+                },
+                success: function (data) {
+                    console.log(data);
+
+                    $('#id').val(id);
+                    $('[name="item"]').val(data.data[2]);
+                    $('[name="quantity"]').val(data.data[3]);
+
+
+                },
+                complete: function () {
+                    $('#loading_ajax').fadeOut("slow");
+                }
+            });
+        }
+
+    }
+
+    function actionHapus(id) {
+        var tanya = confirm('Apakah yakin mau hapus data?');
+        if (tanya) {
+            $.ajax({
+                type: 'POST',
+                data: 'id=' + id,
+                url: '/penjualan/transaksi/hapus',
+                success: function () {
+                    searchFilter(0);
+                }
+            });
+        }
+    }
+
+    function formFilter(x) {
+        $(x).fadeOut('hide');
+        $('#formFilter').fadeIn('show');
+    }
+
+    function formDialog(x) {
+        $(x).fadeOut('hide');
+        $('#formDialog').fadeIn('show');
+    }
+
+    function formDialogClose() {
+        $('#actionTambah').fadeIn('show');
+        $('#formDialog').fadeOut('hide');
+    }
+
+    function formFilterClose() {
+        $('#formFilter').fadeOut('hide');
+    }
+</script>
+
+
+
+{% endblock %}

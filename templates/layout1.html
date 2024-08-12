@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{title}}</title>
+
+
+
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+
+    <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+    <link href="{{url_for('static', filename='css/jquery-ui.css')}}" rel="stylesheet">
+
+    <script src="{{url_for('static', filename='js/fm.tagator.jquery.js')}}"></script>
+    <link href="{{url_for('static', filename='css/fm.tagator.jquery.css')}}" rel="stylesheet">
+
+    <script defer src="{{url_for('static', filename='js/fontawesome/js/all.js')}}"></script>
+    <script src="{{url_for('static', filename='js/sweetalert/sweetalert.min.js')}}"></script>
+
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
+
+    <script src="{{url_for('static', filename='js/jquery-ui-timepicker-addon.min.js')}}"></script>
+    <link href="{{url_for('static', filename='css/jquery-ui-timepicker-addon.min.css')}}" rel="stylesheet">
+
+    <script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+    <link href="{{url_for('static', filename='css/bootstrap-select.min.css')}}" rel="stylesheet" />
+
+    <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/sidebar.css')}}" rel="stylesheet">
+
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+    <!-- Custom styles for this template-->
+    <link href="{{url_for('static', filename='css/sb-admin-2.css')}}" rel="stylesheet">
+    <style>
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+        }
+
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    </style>
+    
+</head>
+
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                <div class="sidebar-brand-text">PT Wijaya Teknik Bersaudara</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Halaman Utama</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Master Data
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/barang">
+                    <i class="fas fa-leaf"></i>
+                    <span>Data Barang</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/penjualan">
+                    <i class="fas fa-fw fa-money-bill-wave"></i>
+                    <span>Data Penjualan</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/proses">
+                    <i class="fas fa-fw fa-sync"></i>
+                    <span>Data Proses</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/hasil">
+                    <i class="fas fa-fw fa-coins"></i>
+                    <span>Data Hasil</span></a>
+            </li>
+
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    Halo, {{session['username']}}
+                                </span>
+                                <img class="img-profile rounded-circle"
+                                    src="{{url_for('static', filename='img/user.png')}}">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a href="/profile" class="dropdown-item">Profile PT Wijaya Teknik Bersaudara</a>
+                                <a class="dropdown-item" href="javascript:void()" onclick="aksiLogout()" >
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Keluar
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <div class="container-fluid">
+
+
+                    {% block content %}
+                    {% endblock %}
+
+                </div>
+
+                <!-- Logout Modal-->
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Apakah anda yakin ingin keluar?</div>
+                            <div class="modal-footer">
+                                <button class="btn btn-warning" type="button" data-dismiss="modal"><i
+                                        class="fas fa-fw fa-times mr-1"></i>Tidak</button>
+                                <a class="btn btn-success" href="logout.php"><i
+                                        class="fas fa-fw fa-check mr-1"></i>Ya</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal" id="ModalGue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i
+                                        class='fa fa-times'></i></button>
+                                <h4 class="modal-title" id="ModalHeader"></h4>
+                            </div>
+                            <div class="modal-body" id="ModalContent"></div>
+                            <div class="modal-footer" id="ModalFooter"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .tox-tinymce {
+                        border: 1px solid #ccc;
+                        border-radius: 0px;
+                    }
+
+                    .navbar-collapse {
+                        padding-right: 0px;
+                    }
+                </style>
+                <script type="text/javascript">
+                    jQuery(function ($) {
+
+                        $(".sidebar-dropdown > a").click(function () {
+                            $(".sidebar-submenu").slideUp(200);
+                            if (
+                                $(this)
+                                    .parent()
+                                    .hasClass("active")
+                            ) {
+                                $(".sidebar-dropdown").removeClass("active");
+                                $(this)
+                                    .parent()
+                                    .removeClass("active");
+                            } else {
+                                $(".sidebar-dropdown").removeClass("active");
+                                $(this)
+                                    .next(".sidebar-submenu")
+                                    .slideDown(200);
+                                $(this)
+                                    .parent()
+                                    .addClass("active");
+                            }
+                        });
+
+                        $("#close-sidebar").click(function () {
+                            $(".page-wrapper").removeClass("toggled");
+                        });
+                        $("#show-sidebar").click(function () {
+                            $(".page-wrapper").addClass("toggled");
+                        });
+
+
+                    });
+                </script>
+                <script id="jsbin-javascript">
+                    function aksiLogout() {
+                        swal({
+                            title: "Keluar?",
+                            text: "Kamu yakin mau keluar?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    window.location.assign("/signout");
+                                }
+
+                            });
+                    }
+
+                    $('.dropdown-toggle').click(function () {
+
+                        if (!$(this).parent().hasClass('open')) {
+
+                            $('html').addClass('menu-open');
+
+                        } else {
+
+                            $('html').removeClass('menu-open');
+
+
+                        }
+
+                    });
+
+
+                    //$('.navbar-right').attr("style", "display:none;");
+                    //$('.panel-title-button').attr("style", "display:block; margin-top:8px;");
+                    //$('.panel-title-button').detach().prependTo($('#bs-example-navbar-collapse-1'));
+
+
+                    //$('.panel-footer-button').detach().prependTo($('.modal__footer'));
+                    //$('.panel-heading').remove();
+
+
+                    $(document).on('click touchstart', function (a) {
+                        if ($(a.target).parents().index($('.navbar-nav')) == -1) {
+                            $('html').removeClass('menu-open');
+                        }
+                    });
+                </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{title}}</title>
+
+    <link media="all" type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <script src="{{url_for('static', filename='js/sweetalert/sweetalert.min.js')}}"></script>
+
+    <!--Icon Fonts-->
+    <script defer src="{{url_for('static', filename='js/fontawesome/js/all.js')}}"></script>
+    <!-- jQuery Load -->
+    <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Bootstrap JS -->
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    
+    <!-- SweetAlert JS -->
+    <script src="{{url_for('static', filename='js/sweetalert/sweetalert.min.js')}}"></script>
+
+
+
+
+</head>
+
+<body data-spy="scroll" data-offset="20" data-target="#navbar">
+    <!-- Nav Menu Section -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-spy="affix" data-offset-top="50">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    PT Wijaya Teknik Bersaudara
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- Nav Menu Section End -->
+
+    {% block content %}
+    {% endblock %}
+
+    <div id="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>© 2024 PT Wijaya Teknik Bersaudara. Aulia Sustri Dewiyanti Irawan.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright Section End-->
+
+
+
+    <style>
+        #copyright {
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+
+    </style>
+    <script>
+
+        function aksiLogout() {
+            swal({
+                    title: "Keluar?",
+                    text: "Kamu yakin mau keluar?",
+                    icon: "warning",
+                    buttons: ["Batal", "Ya"],
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location.assign("/signout");
+                    } else {
+                        swal("Batal", "Anda tidak keluar.", "info");
+                    }
+                });
+
+        }
+    </script>
+</body>
+
+
+
+
+</html>

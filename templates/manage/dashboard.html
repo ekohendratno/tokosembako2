@@ -1,0 +1,50 @@
+{% extends "layout1.html" %}
+{% block content %}
+<div class="container-flex">
+
+    <div class="col-sm-12 col-md-12">
+
+        <h4>DASHBOARD</h4>
+        <hr/>
+
+    </div>
+    <!-- Entries Column -->
+
+
+    <div class="col-md-12">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{total_barang}}</h3>
+                        <p>Total Barang</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <div class="inner">
+                            <h3>{{total_penjualan}}</h3>
+                            <p>Total Transaksi</p>
+                        </div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-reply-all"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

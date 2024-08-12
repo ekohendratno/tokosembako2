@@ -1,0 +1,307 @@
+{% extends "layout1.html" %}
+{% block content %}
+
+<div class="container-flex">
+
+    <div class="col-sm-12 col-md-12">
+
+        <h4>BARANG</h4>
+        <hr />
+
+    </div>
+    <!-- Entries Column -->
+
+    <div class="col-md-12">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            
+
+            <div id="formDialog" class="col-md-4" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>DATA</b>
+                    </div>
+                    <div class="panel-body">
+                        <form id="formBarang" enctype="multipart/form-data">
+                            <input type="hidden" id="id" name="id" value="0" />
+                            <label for="name">Nama</label>
+                            <input type="text" id="name" name="name" class="form-control" />
+                            <br>
+                            <label for="price">Harga</label>
+                            <input type="number" id="price" name="price" class="form-control" />
+                            <br>
+                            <label for="qty">Jumlah</label>
+                            <input type="number" value="1" min="1" id="qty" name="qty" class="form-control" />
+                            <br>
+                            <label for="image">Gambar</label>
+                            <input type="file" id="image" name="image" class="form-control" />
+                            <br>
+                            <div class="text-right">
+                                <button type="button" onClick="formDialogClose()"
+                                    class="btn btn-default">Close</button>
+                                <button type="button" id="actionSimpan" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div id="formFilter" class="col-md-4" style="display: none;">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>FILTER</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-6">
+                            <label for="sortBy">Urutkan</label><br />
+                            <select class="form-control" id="sortBy" onchange="searchFilter()">
+                                <option value="desc">Descending</option>
+                                <option value="asc">Ascending</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="limitBy">Limit</label><br />
+                            <select class="form-control" id="limitBy" onchange="searchFilter()">
+                                <option value="10">10</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button type="button" onClick="formFilterClose()" class="btn btn-default">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left">
+                        <b>DAFTAR DATA</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" id="keywords"
+                                    placeholder="Type keywords to filter posts" onkeyup="searchFilter()" />
+                            </div>
+                            <div class="col-md-4">
+                                <a href="javascript:void(0)" onClick="formFilter()" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-filter"></span> Filter</a>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <a href="javascript:void(0)" onClick="formDialog(this)" id="actionTambah"
+                                    class="btn btn-primary">Tambah</a>
+                                <a href="javascript:void(0)" onClick="formExport(this)"
+                                    class="btn btn-success">Export Data</a>
+                            </div>
+                        </div>
+                        <br />
+                        <table id='postList' class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="50">No</th>
+                                    <th class="text-center" width="120">Image</th>
+                                    <th class="text-left">Name</th>
+                                    <th class="text-center" width="50">Qty</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center" width="150"><span
+                                            class="glyphicon glyphicon-cog"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function formExport(element) {
+        var url = '/barang/export-pdf/0';
+        window.open(url, '_blank');
+    }
+
+    $(document).ready(function () {
+        $('#actionSimpan').click(function () {
+            var formData = new FormData();
+            formData.append('id', $('#id').val());
+            formData.append('name', $('#name').val());
+            formData.append('price', $('#price').val());
+            formData.append('qty', $('#qty').val());
+            formData.append('image', $('#image')[0].files[0]);
+
+            $.ajax({
+                url: '/barang/simpan',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#loading_ajax').show();
+                },
+                success: function (response) {
+                    console.log(response);
+                    $('#loading_ajax').fadeOut("slow");
+                    swal({
+                        title: "Berhasil!",
+                        text: "Sedang di dialihkan, Tunggu beberapa saat!",
+                        icon: "success",
+                        button: true,
+                    });
+
+                    $('#formBarang')[0].reset();
+                    $('#formDialog').toggle();
+                    searchFilter(0);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    $('#loading_ajax').fadeOut("slow");
+                    swal({
+                        title: "Gagal!",
+                        text: xhr.responseText,
+                        icon: "warning",
+                        button: true,
+                    });
+                }
+            });
+        });
+    });
+
+
+
+
+    searchFilter(0);
+    function searchFilter(page_num) {
+        page_num = page_num ? page_num : 0;
+        var keywords = $('#keywords').val();
+        var sortBy = $('#sortBy').val();
+        var limitBy = $('#limitBy').val();
+        $.ajax({
+            type: 'GET',
+            url: 'barang/data',
+            data: 'page=' + page_num + '&keywords=' + keywords + '&sortBy=' + sortBy + '&limitBy=' + limitBy,
+            dataType: 'json',
+            beforeSend: function () {
+                $('#loading_ajax').show();
+            },
+            success: function (responseData) {
+                console.log(responseData);
+                paginationData(responseData.data);
+                $('#loading_ajax').fadeOut("slow");
+            }
+        });
+    }
+
+    function paginationData(data) {
+        $('#postList tbody').empty();
+        var nomor = 1;
+        for (emp in data) {
+
+            var created_at = formatDate(data[emp][5]);
+            var updated_at = formatDate(data[emp][6]);
+
+
+            var imagePath = data[emp][2];
+            var imageHtml = '';
+
+            if (imagePath) {
+                imageHtml = `<img src="/` + imagePath + `" alt="Image" style="max-width: 100px; max-height: 100px;">`;
+            } else {
+                imageHtml = `<img src="{{ url_for('static', filename='img/noimage.png') }}" alt="Image" style="max-width: 100px; max-height: 100px;">`;
+            }
+
+
+            var empRow = '<tr>' +
+                '<td class="text-center">' + nomor + '</td>' +
+                '<td class="text-center">' + imageHtml + '</td>' +
+                '<td>' + data[emp][1] + '</td>' +
+                '<td class="text-center">' + data[emp][4] + '</td>' +
+                '<td class="text-center">' + formatRupiah(data[emp][3]) + '</td>' +
+                '<td class="text-center">' +
+                '<a onClick="actionEdit(' + data[emp][0] + ')" href="javascript:void(0)"  class="btn btn-circle btn-success"><span class="glyphicon glyphicon-pencil"></span></a>' +
+                '<a onclick="actionHapus(' + data[emp][0] + ')" href="javascript:void(0)"  class="btn btn-circle btn-danger"><span class="glyphicon glyphicon-trash"></span></a>' +
+                '</td>' +
+                +'</tr>';
+            nomor++;
+            $('#postList tbody').append(empRow);
+        }
+    }
+
+
+    function actionEdit(id) {
+        $('#formDialog').fadeIn('show');
+        $('#formBarang')[0].reset();
+        if (id > 0) {
+            $.ajax({
+                type: "GET",
+                url: "/barang/data/" + id,
+                cache: false,
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#loading_ajax').show();
+                },
+                success: function (data) {
+                    console.log(data);
+
+                    $('#id').val(id);
+                    $('[name="name"]').val(data.data[1]);
+                    $('[name="price"]').val(data.data[3]);
+                    $('[name="qty"]').val(data.data[4]);
+
+
+                },
+                complete: function () {
+                    $('#loading_ajax').fadeOut("slow");
+                }
+            });
+        }
+
+    }
+
+    function actionHapus(id) {
+        var tanya = confirm('Apakah yakin mau hapus data?');
+        if (tanya) {
+            $.ajax({
+                type: 'POST',
+                data: 'id=' + id,
+                url: '/barang/hapus',
+                success: function () {
+                    searchFilter(0);
+                }
+            });
+        }
+    }
+
+    function formFilter(x) {
+        $(x).fadeOut('hide');
+        $('#formFilter').fadeIn('show');
+    }
+
+    function formDialog(x) {
+        $(x).fadeOut('hide');
+        $('#formDialog').fadeIn('show');
+    }
+
+    function formDialogClose() {
+        $('#actionTambah').fadeIn('show');
+        $('#formDialog').fadeOut('hide');
+    }
+
+    function formFilterClose() {
+        $('#formFilter').fadeOut('hide');
+    }
+</script>
+
+
+
+{% endblock %}
